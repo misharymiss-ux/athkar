@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-t="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>أذكار المسلم</title>
+<meta name="theme-color" content="#0f5c4d">
+<meta name="description" content="تطبيق أذكار يعمل دون اتصال">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="أذكار المسلم">
+<link rel="icon" id="lnkIcon">
+<link rel="apple-touch-icon" id="lnkApple">
+<link rel="manifest" id="lnkManifest">
+<style>
+/* ===== الألوان والثيم ===== */
+:root{--bg:#f2f6f1;--card:#fff;--tx:#14302a;--mu:#5d746d;--pr:#0f5c4d;--on:#fff;--gold:#b8892b;--bd:#d9e3dc;--hh:62px;--fh:62px;--fs:1.35}
+[data-t=dark]{--bg:#0c1815;--card:#142522;--tx:#e6efe9;--mu:#8fa8a0;--pr:#3fb394;--on:#06231c;--gold:#e0b04e;--bd:#23393454}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:"Noto Naskh Arabic","Amiri","Traditional Arabic","Geeza Pro","Segoe UI",Tahoma,serif;line-height:1.7}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+/* ===== الهيدر ===== */
+header{position:fixed;inset:0 0 auto 0;height:calc(var(--hh) + env(safe-area-inset-top));padding:env(safe-area-inset-top) 10px 0;background:var(--pr);color:var(--on);display:flex;align-items:center;gap:6px;z-index:20}
+[data-t=dark] header{background:#10302a;color:#e6efe9}
+.brand{display:flex;align-items:center;gap:8px;flex:1;min-width:0;font-weight:700;font-size:1.1rem}
+.brand img{width:34px;height:34px;border-radius:9px}
+.brand span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hb{min-width:40px;height:40px;border-radius:12px;background:#ffffff22;font-size:1.15rem;display:grid;place-items:center;padding:0 8px}
+.hb.txt{font-size:.85rem;font-weight:700;background:var(--gold);color:#1b1304}
+/* ===== المحتوى ===== */
+main{padding:calc(var(--hh) + env(safe-area-inset-top) + 12px) 14px calc(var(--fh) + env(safe-area-inset-bottom) + 20px);max-width:720px;margin:auto}
+h2{margin:6px 0 12px;font-size:1.3rem}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:14px;margin-bottom:12px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:6px}
+.chip{flex:none;padding:6px 16px;border-radius:99px;border:1px solid var(--bd);background:var(--card)}
+.chip.on{background:var(--pr);color:var(--on);border-color:var(--pr)}
+.dz{font-size:calc(var(--fs)*1.1rem);line-height:2.1;margin:0 0 10px}
+.meta{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--mu);font-size:.9rem}
+.ring{--p:0;width:64px;height:64px;border-radius:50%;background:conic-gradient(var(--gold) calc(var(--p)*1%),var(--bd) 0);display:grid;place-items:center;flex:none}
+.ring b{width:52px;height:52px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:1.05rem}
+.done{opacity:.6}.done .ring b{background:var(--pr);color:var(--on)}
+.act{display:flex;gap:6px}
+.ib{width:38px;height:38px;border-radius:50%;background:var(--bg);border:1px solid var(--bd)}
+.big{width:210px;height:210px;border-radius:50%;margin:20px auto;display:grid;place-items:center;background:var(--pr);color:var(--on);font-size:3.6rem;font-weight:700;box-shadow:0 0 0 10px var(--bd);user-select:none;touch-action:manipulation}
+.big:active{transform:scale(.97)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.btn{padding:10px 16px;border-radius:12px;background:var(--pr);color:var(--on);font-weight:700}
+.btn.alt{background:var(--card);color:var(--tx);border:1px solid var(--bd)}
+.set{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px dashed var(--bd)}
+.set:last-child{border:0}
+select,input[type=range]{font:inherit;padding:6px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx)}
+.lnk{display:block;width:100%;text-align:right;padding:12px 0;border-bottom:1px dashed var(--bd)}
+.page p{margin:.5em 0}
+.empty{text-align:center;color:var(--mu);padding:40px 10px}
+/* ===== الفوتر ===== */
+footer{position:fixed;inset:auto 0 0 0;height:calc(var(--fh) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);background:var(--card);border-top:1px solid var(--bd);display:flex;z-index:20}
+footer button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:.8rem;color:var(--mu)}
+footer button i{font-style:normal;font-size:1.35rem;line-height:1.2}
+footer button.on{color:var(--pr);font-weight:700}
+/* ===== رسائل ===== */
+#upd{display:none;position:fixed;top:calc(var(--hh) + env(safe-area-inset-top) + 8px);inset-inline:12px;z-index:25;background:var(--gold);color:#1b1304;border-radius:14px;padding:10px 14px;align-items:center;justify-content:space-between;gap:10px;font-weight:700}
+#upd button{background:#1b1304;color:#fff;border-radius:10px;padding:6px 14px}
+#toast{position:fixed;bottom:calc(var(--fh) + env(safe-area-inset-bottom) + 14px);left:50%;transform:translateX(-50%);background:#14302aef;color:#fff;padding:9px 18px;border-radius:99px;z-index:40;display:none;max-width:88%;text-align:center}
+#modal{display:none;position:fixed;inset:0;background:#0009;z-index:50;align-items:center;justify-content:center;padding:20px}
+#modal .box{background:var(--card);border-radius:20px;padding:18px;max-width:520px;width:100%;max-height:85vh;overflow:auto}
+@media (prefers-reduced-motion:no-preference){.big{transition:transform .08s}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand"><img id="hIcon" alt=""><span>أذكار المسلم</span></div>
+  <button class="hb txt" id="btnInstall" hidden>تثبيت التطبيق</button>
+  <button class="hb" id="btnDaily" title="ذكر اليوم" aria-label="ذكر اليوم">🌙</button>
+  <button class="hb" id="btnFont" title="حجم الخط" aria-label="حجم الخط">Aa</button>
+  <button class="hb" id="btnShare" title="مشاركة التطبيق" aria-label="مشاركة التطبيق">⤴</button>
+</header>
+
+<div id="upd"><span>يوجد إصدار جديد من التطبيق</span><button id="updGo">تحديث الآن</button></div>
+<main id="view"></main>
+
+<footer>
+  <button data-go="adhkar"><i>🕌</i>الأذكار</button>
+  <button data-go="tasbih"><i>📿</i>المسبحة</button>
+  <button data-go="fav"><i>⭐</i>المفضلة</button>
+  <button data-go="settings"><i>⚙️</i>الإعدادات</button>
+</footer>
+
+<div id="toast" role="status"></div>
+<div id="modal"><div class="box" id="mbox"></div></div>
+
+<script>
+'use strict';
+/* =====================================================
+   ١) الإعدادات العامة
+   ===================================================== */
+const VERSION='1.0.0';            // غيّر هذا الرقم عند كل تحديث للكود ليظهر تنبيه التحديث
+const STORE='adhkar_pwa_v1';
+const $=s=>document.querySelector(s);
+const nf=n=>Number(n).toLocaleString('ar-EG');
+
+/* =====================================================
+   ٢) بيانات الأذكار (s = اسم مختصر، t = النص، r = التكرار)
+   ===================================================== */
+const D={
+ ks:{s:'آية الكرسي',r:1,t:'اللّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ وَلَا يَئُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ'},
+ ikh:{s:'سورة الإخلاص',r:3,t:'قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ'},
+ fal:{s:'سورة الفلق',r:3,t:'قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ ۝ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ'},
+ nas:{s:'سورة الناس',r:3,t:'قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ ۝ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ'},
+ ikh1:{s:'سورة الإخلاص',r:1,t:'قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ'},
+ fal1:{s:'سورة الفلق',r:1,t:'قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ ۝ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ'},
+ nas1:{s:'سورة الناس',r:1,t:'قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ ۝ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ'},
+ rdt:{s:'الرضا بالله',r:3,t:'رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ ﷺ نَبِيًّا'},
+ bsm:{s:'بسم الله',r:3,t:'بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ'},
+ sya:{s:'سيد الاستغفار',r:1,t:'اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ لَكَ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ'},
+ tsb:{s:'التسبيح',r:100,t:'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ'},
+ hl:{s:'التهليل',r:10,t:'لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ'},
+ hl1:{s:'التهليل',r:1,t:'لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ'},
+ ist:{s:'الاستغفار',r:100,t:'أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ'},
+ ist3:{s:'الاستغفار',r:3,t:'أَسْتَغْفِرُ اللَّهَ'},
+ slw:{s:'الصلاة على النبي',r:10,t:'اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ'},
+ slm:{s:'بعد السلام',r:1,t:'اللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ، تَبَارَكْتَ يَا ذَا الْجَلَالِ وَالْإِكْرَامِ'},
+ s33:{s:'التسبيح',r:33,t:'سُبْحَانَ اللَّهِ'},
+ h33:{s:'التحميد',r:33,t:'الْحَمْدُ لِلَّهِ'},
+ k33:{s:'التكبير',r:33,t:'اللَّهُ أَكْبَرُ'},
+ slp:{s:'دعاء النوم',r:1,t:'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا'},
+ wak:{s:'دعاء الاستيقاظ',r:1,t:'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ'}
+};
+const CATS={
+ morning:{n:'الصباح',ids:['ks','ikh','fal','nas','rdt','bsm','sya','tsb','hl','ist','slw']},
+ evening:{n:'المساء',ids:['ks','ikh','fal','nas','rdt','bsm','sya','tsb','hl','ist','slw']},
+ prayer:{n:'بعد الصلاة',ids:['ist3','slm','s33','h33','k33','hl1']},
+ sleep:{n:'النوم',ids:['ks','ikh1','fal1','nas1','slp']},
+ wake:{n:'الاستيقاظ',ids:['wak']}
+};
+
+/* =====================================================
+   ٣) حفظ البيانات على جهاز المستخدم (localStorage)
+   ===================================================== */
+const DEF={theme:'light',fs:1.35,fav:[],counts:{},day:'',tasbih:0,total:0,target:33,cat:'morning'};
+let S=Object.assign({},DEF);
+try{S=Object.assign({},DEF,JSON.parse(localStorage.getItem(STORE)||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(S))}catch(e){}};
+(function dayReset(){const d=new Date().toDateString();if(S.day!==d){S.day=d;S.counts={};save()}})();
+function applyTheme(){document.documentElement.dataset.t=S.theme;document.documentElement.style.setProperty('--fs',S.fs);
+ const c=S.theme==='dark'?'#10302a':'#0f5c4d';document.querySelector('meta[name=theme-color]').content=c}
+applyTheme();
+
+/* =====================================================
+   ٤) أدوات مساعدة
+   ===================================================== */
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(tt);tt=setTimeout(()=>t.style.display='none',2600)}
+function modal(html){$('#mbox').innerHTML=html+'<div class="row" style="margin-top:14px"><button class="btn" id="mClose">حسنًا</button></div>';$('#modal').style.display='flex';$('#mClose').onclick=()=>$('#modal').style.display='none'}
+$('#modal').onclick=e=>{if(e.target.id==='modal')e.target.style.display='none'};
+const APPURL=()=>location.href.split('#')[0];
+async function shareText(title,text){
+ try{if(navigator.share){await navigator.share({title,text,url:APPURL()});return}}catch(e){if(e.name==='AbortError')return}
+ try{await navigator.clipboard.writeText(text+'\n'+APPURL());toast('تم نسخ الرابط')}catch(e){prompt('انسخ الرابط:',APPURL())}
+}
+const buzz=()=>{try{navigator.vibrate&&navigator.vibrate(15)}catch(e){}};
+
+/* =====================================================
+   ٥) الأيقونات (تُرسم وتُدمج كـ data URI) + الـ manifest
+   ===================================================== */
+function drawIcon(size){
+ const c=document.createElement('canvas');c.width=c.height=size;const x=c.getContext('2d'),k=size/512;
+ x.fillStyle='#0f5c4d';x.fillRect(0,0,size,size);
+ x.fillStyle='#b8892b';x.beginPath();x.arc(256*k,256*k,150*k,0,7);x.fill();      // هلال
+ x.fillStyle='#0f5c4d';x.beginPath();x.arc(300*k,236*k,128*k,0,7);x.fill();
+ x.fillStyle='#f2f6f1';x.beginPath();                                               // نجمة
+ for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,r=(i%2?20:46)*k;x.lineTo(330*k+r*Math.cos(a),232*k+r*Math.sin(a))}
+ x.fill();return c.toDataURL('image/png');
+}
+const ICON192=drawIcon(192),ICON512=drawIcon(512);
+$('#lnkIcon').href=ICON192;$('#lnkApple').href=ICON192;$('#hIcon').src=ICON192;
+(function manifest(){
+ const m={name:'أذكار المسلم',short_name:'أذكار',description:'أذكار الصباح والمساء وبعد الصلاة تعمل دون اتصال',
+  lang:'ar',dir:'rtl',start_url:APPURL(),scope:APPURL().replace(/[^/]*$/,''),display:'standalone',
+  background_color:'#f2f6f1',theme_color:'#0f5c4d',
+  icons:[{src:ICON192,sizes:'192x192',type:'image/png',purpose:'any maskable'},{src:ICON512,sizes:'512x512',type:'image/png',purpose:'any maskable'}]};
+ // الـ manifest مدمج كـ data URI (يُبنى هنا داخل الملف نفسه)
+ $('#lnkManifest').href='data:application/manifest+json;charset=utf-8,'+encodeURIComponent(JSON.stringify(m));
+})();
+
+/* =====================================================
+   ٦) Service Worker مدمج داخل الملف
+   ملاحظة: المتصفحات لا تسمح بتسجيل SW من blob: أو data:
+   لذلك تتم المحاولة وإذا رُفضت نعتمد على البديل (انظر الشرح).
+   ===================================================== */
+const SW_CODE=`const C='adhkar-${VERSION}';
+self.addEventListener('install',e=>self.skipWaiting());
+self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))).then(()=>clients.claim())));
+self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;
+ e.respondWith(fetch(e.request).then(r=>{const c=r.clone();caches.open(C).then(x=>x.put(e.request,c));return r}).catch(()=>caches.match(e.request).then(r=>r||caches.match(self.registration.scope))))});`;
+let swState='غير مدعوم';
+async function regSW(){
+ if(!('serviceWorker' in navigator)){return}
+ try{await navigator.serviceWorker.register(URL.createObjectURL(new Blob([SW_CODE],{type:'text/javascript'})));swState='مفعّل'}
+ catch(e){swState='مرفوض من المتصفح (البيانات محفوظة محليًا، والتطبيق يعمل من النسخة المخزّنة)'}
+}
+regSW();
+
+/* =====================================================
+   ٧) التثبيت
+   ===================================================== */
+let dip=null;
+const isInstalled=()=>matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||navigator.standalone===true;
+const isIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+function syncInstall(){$('#btnInstall').hidden=isInstalled()}
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();dip=e;syncInstall()});
+addEventListener('appinstalled',()=>{dip=null;$('#btnInstall').hidden=true;toast('تم تثبيت التطبيق')});
+matchMedia('(display-mode: standalone)').addEventListener&&matchMedia('(display-mode: standalone)').addEventListener('change',syncInstall);
+$('#btnInstall').onclick=async()=>{
+ if(dip){dip.prompt();await dip.userChoice;dip=null;syncInstall();return}
+ modal(isIOS()?'<h2>التثبيت على آيفون</h2><p>اضغط زر المشاركة <b>⤴</b> في سفاري، ثم اختر <b>«إضافة إلى الشاشة الرئيسية»</b>.</p>'
+  :'<h2>تثبيت التطبيق</h2><p>افتح قائمة المتصفح ⋮ ثم اختر <b>«تثبيت التطبيق»</b> أو <b>«إضافة إلى الشاشة الرئيسية»</b>.</p><p>يلزم فتح الملف عبر رابط https لتظهر هذه الخيارات.</p>');
+};
+syncInstall();
+
+/* =====================================================
+   ٨) التحديث: يقارن رقم الإصدار في الملف المنشور بالنسخة الحالية
+   ===================================================== */
+let newVer=null;
+async function checkUpdate(manual){
+ try{
+  const r=await fetch(APPURL(),{cache:'no-store'});const t=await r.text();
+  const m=t.match(/const VERSION='([^']+)'/);
+  if(m&&m[1]!==VERSION){newVer=m[1];$('#upd').style.display='flex';return true}
+  if(manual)toast('أنت تستخدم أحدث إصدار');
+ }catch(e){if(manual)toast('تعذّر التحقق، تأكد من الاتصال بالإنترنت')}
+ return false;
+}
+$('#updGo').onclick=async()=>{
+ try{const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)));
+  const rs=await navigator.serviceWorker?.getRegistrations();rs&&rs.forEach(r=>r.unregister())}catch(e){}
+ location.reload();
+};
+setTimeout(()=>checkUpdate(false),3000);
+
+/* =====================================================
+   ٩) الصفحات
+   ===================================================== */
+let view='adhkar';
+const NAV={adhkar:'adhkar',tasbih:'tasbih',fav:'fav',settings:'settings'};
+function go(v){view=v;render();scrollTo(0,0)}
+document.querySelectorAll('footer button').forEach(b=>b.onclick=()=>go(b.dataset.go));
+
+function dhikrCard(id,cat,withCount){
+ const d=D[id],k=cat+':'+id,c=S.counts[k]||0,fav=S.fav.includes(id);
+ const p=Math.min(100,Math.round(c/d.r*100));
+ return `<div class="card ${c>=d.r?'done':''}" data-k="${k}">
+ <p class="dz">${d.t}</p>
+ <div class="meta"><span>${d.s}${withCount?` · التكرار ${nf(d.r)}`:''}</span>
+ <div class="act"><button class="ib" data-fav="${id}" aria-label="مفضلة">${fav?'⭐':'☆'}</button><button class="ib" data-share="${id}" aria-label="مشاركة">⤴</button></div>
+ ${withCount?`<button class="ring" data-cnt="${k}" data-r="${d.r}" style="--p:${p}" aria-label="عدّ"><b>${nf(c)}</b></button>`:''}</div></div>`;
+}
+function vAdhkar(){
+ const cat=CATS[S.cat];
+ return `<div class="chips">${Object.keys(CATS).map(k=>`<button class="chip ${k===S.cat?'on':''}" data-cat="${k}">${CATS[k].n}</button>`).join('')}</div>`
+ +cat.ids.map(id=>dhikrCard(id,S.cat,true)).join('')
+ +`<p class="empty" style="padding:6px">اضغط على الدائرة للعدّ. تُصفَّر العدّادات تلقائيًا كل يوم.</p>`;
+}
+function vTasbih(){
+ return `<h2>المسبحة</h2><div class="card" style="text-align:center">
+ <button class="big" id="tasbihBtn" aria-label="سبّح">${nf(S.tasbih)}</button>
+ <p class="meta" style="justify-content:center">الهدف: ${S.target?nf(S.target):'مفتوح'} · الإجمالي: ${nf(S.total)}</p>
+ <div class="row" style="justify-content:center;margin-top:10px">
+ <select id="tgt" aria-label="الهدف">${[33,100,1000,0].map(v=>`<option value="${v}" ${v===S.target?'selected':''}>${v?nf(v):'مفتوح'}</option>`).join('')}</select>
+ <button class="btn alt" id="tReset">تصفير</button></div></div>`;
+}
+function vFav(){
+ if(!S.fav.length)return `<h2>المفضلة</h2><div class="empty">لا توجد أذكار مفضلة بعد.<br>اضغط ☆ على أي ذكر لإضافته هنا.</div>`;
+ return `<h2>المفضلة</h2>`+S.fav.filter(id=>D[id]).map(id=>dhikrCard(id,'fav',false)).join('');
+}
+function vSettings(){
+ return `<h2>الإعدادات</h2><div class="card">
+ <div class="set"><span>إصدار التطبيق</span><b>${VERSION}</b></div>
+ <div class="set"><span>الثيم</span><select id="theme"><option value="light" ${S.theme==='light'?'selected':''}>فاتح</option><option value="dark" ${S.theme==='dark'?'selected':''}>داكن</option></select></div>
+ <div class="set"><span>حجم الخط</span><input type="range" id="fsr" min="1" max="2" step=".1" value="${S.fs}"></div>
+ <div class="set"><span>تحديث التطبيق</span><button class="btn" id="chkUpd">تحديث التطبيق</button></div>
+ <div class="set"><span>العمل دون اتصال</span><small style="color:var(--mu);max-width:55%">${swState}</small></div></div>
+ <div class="card"><b>النسخ الاحتياطي</b><p style="color:var(--mu);margin:4px 0 10px">صدّر مفضلتك وعدّاداتك إلى ملف أو استعدها من ملف.</p>
+ <div class="row"><button class="btn" id="exp">تصدير البيانات</button><button class="btn alt" id="imp">استيراد البيانات</button></div>
+ <input type="file" id="impF" accept="application/json,.json" hidden></div>
+ <div class="card"><button class="lnk" data-go="terms">شروط الاستخدام</button><button class="lnk" data-go="privacy">سياسة الخصوصية</button><button class="lnk" data-go="about">من نحن</button><button class="lnk" data-go="contact">اتصل بنا</button></div>`;
+}
+const back=`<button class="btn alt" data-go="settings" style="margin-bottom:10px">رجوع ›</button>`;
+const PAGES={
+ terms:`<h2>شروط الاستخدام</h2><p>هذا التطبيق مجاني ومقدَّم لأغراض دينية وتعليمية. باستخدامك له فأنت توافق على الشروط التالية:</p><p>١) تُستخدم المحتويات للاستفادة الشخصية، ويجوز مشاركة التطبيق ما دام ذلك دون مقابل.</p><p>٢) بذلنا جهدنا في نقل النصوص بدقة، وننصح بمراجعتها من مصادر موثوقة عند الحاجة.</p><p>٣) قد نحدّث التطبيق أو نعدّل الشروط، واستمرار استخدامك يعني قبولك بها.</p>`,
+ privacy:`<h2>سياسة الخصوصية</h2><p>خصوصيتك محفوظة: التطبيق لا يجمع أي بيانات شخصية ولا يرسل شيئًا إلى أي خادم.</p><p>تُخزَّن المفضلة والعدّادات وإعدادات الثيم على جهازك فقط داخل المتصفح، ويمكنك حذفها بمسح بيانات الموقع.</p><p>لا نستخدم ملفات تتبّع ولا إعلانات. عند التحقق من التحديثات يُطلب ملف التطبيق نفسه فقط.</p>`,
+ about:`<h2>من نحن</h2><p>«أذكار المسلم» تطبيق بسيط يجمع أذكار الصباح والمساء وبعد الصلاة والنوم والاستيقاظ، مع مسبحة إلكترونية ومفضلة وعدّادات يومية.</p><p>صُمّم ليعمل دون اتصال وبأقل استهلاك للبطارية والبيانات. نسأل الله أن ينفع به.</p><p style="color:var(--mu)">الإصدار ${VERSION}</p>`,
+ contact:`<h2>اتصل بنا</h2><p>يسعدنا استقبال ملاحظاتك واقتراحاتك وتصحيحاتك.</p><p>البريد الإلكتروني: <a href="mailto:example@example.com" style="color:var(--pr)">example@example.com</a></p><p style="color:var(--mu)">(غيّر هذا العنوان في الكود إلى بريدك الحقيقي)</p>`
+};
+function render(){
+ const m=$('#view');
+ m.innerHTML=PAGES[view]?back+`<div class="card page">${PAGES[view]}</div>`
+  :view==='adhkar'?vAdhkar():view==='tasbih'?vTasbih():view==='fav'?vFav():vSettings();
+ const act=PAGES[view]?'settings':view;
+ document.querySelectorAll('footer button').forEach(b=>b.classList.toggle('on',b.dataset.go===act));
+}
+
+/* =====================================================
+   ١٠) التفاعل (تفويض الأحداث)
+   ===================================================== */
+$('#view').addEventListener('click',e=>{
+ const t=e.target.closest('button,[data-go]');if(!t)return;
+ if(t.dataset.go)return go(t.dataset.go);
+ if(t.dataset.cat){S.cat=t.dataset.cat;save();return render()}
+ if(t.dataset.cnt){ // عدّاد الذكر
+  const k=t.dataset.cnt,r=+t.dataset.r;if((S.counts[k]||0)>=r)return toast('اكتمل هذا الذكر ✓');
+  S.counts[k]=(S.counts[k]||0)+1;save();buzz();
+  const c=S.counts[k];t.style.setProperty('--p',Math.round(c/r*100));t.firstChild.textContent=nf(c);
+  if(c>=r){t.closest('.card').classList.add('done');buzz();toast('أحسنت، اكتمل الذكر')}return}
+ if(t.dataset.fav){const id=t.dataset.fav,i=S.fav.indexOf(id);i<0?S.fav.push(id):S.fav.splice(i,1);save();return render()}
+ if(t.dataset.share){const d=D[t.dataset.share];return shareText(d.s,d.t)}
+ if(t.id==='tasbihBtn'){S.tasbih++;S.total++;save();buzz();t.textContent=nf(S.tasbih);
+  if(S.target&&S.tasbih>=S.target){toast('بلغت الهدف '+nf(S.target));S.tasbih=0;save()}return}
+ if(t.id==='tReset'){S.tasbih=0;save();return render()}
+ if(t.id==='chkUpd')return checkUpdate(true);
+ if(t.id==='exp')return exportData();
+ if(t.id==='imp')return $('#impF').click();
+});
+$('#view').addEventListener('change',e=>{
+ const t=e.target;
+ if(t.id==='theme'){S.theme=t.value;save();applyTheme()}
+ if(t.id==='tgt'){S.target=+t.value;save();render()}
+ if(t.id==='impF')importData(t.files[0]);
+});
+$('#view').addEventListener('input',e=>{if(e.target.id==='fsr'){S.fs=+e.target.value;save();applyTheme()}});
+
+/* أزرار الهيدر */
+$('#btnShare').onclick=()=>shareText('أذكار المسلم','أذكار الصباح والمساء والمسبحة، تعمل دون اتصال. جرّب التطبيق:');
+$('#btnFont').onclick=()=>{S.fs=S.fs>=1.9?1.1:+(S.fs+.2).toFixed(1);save();applyTheme();toast('حجم الخط: '+nf(Math.round(S.fs*100))+'٪')};
+$('#btnDaily').onclick=()=>{ // ذكر اليوم: يتغير كل يوم
+ const keys=Object.keys(D).filter(k=>!/^(ks|ikh|fal|nas)/.test(k)||k==='ks');
+ const d=D[keys[Math.floor(Date.now()/864e5)%keys.length]];
+ modal(`<h2>ذكر اليوم</h2><p class="dz">${d.t}</p><p style="color:var(--mu)">${d.s}</p>`);
+};
+
+/* =====================================================
+   ١١) النسخ الاحتياطي والاستعادة
+   ===================================================== */
+function exportData(){
+ const blob=new Blob([JSON.stringify({app:'adhkar-pwa',version:VERSION,date:new Date().toISOString(),data:S},null,2)],{type:'application/json'});
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='adhkar-backup-'+new Date().toISOString().slice(0,10)+'.json';
+ document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);toast('تم تصدير النسخة الاحتياطية');
+}
+function importData(f){
+ if(!f)return;const r=new FileReader();
+ r.onload=()=>{try{const j=JSON.parse(r.result);if(j.app!=='adhkar-pwa'||!j.data)throw 0;
+  S=Object.assign({},DEF,j.data);save();applyTheme();render();toast('تمت استعادة البيانات')}
+  catch(e){toast('الملف غير صالح')}};
+ r.readAsText(f);
+}
+
+/* تشغيل */
+render();
+</script>
+</body>
+</html>
